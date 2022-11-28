@@ -9,10 +9,10 @@
 
 <div class="container mt-4 mb-4">
     <h2 class="text-center text-danger">Customer Login</h2>
-  <div class="col-sm-8 d-flex justify-content-center ">
-  <form action="customer_reg_process.php" method="POST">
+  <div class="col-sm-6 ">
+  <form action="check_user.php" method="POST">
 
-    	 <div class="form-group">
+     <div class="form-group">
       <label for="email">Email:</label>
       <input type="text" class="form-control" id="email" placeholder="Enter email..." name="cus_email">
     </div>
@@ -22,9 +22,7 @@
       <input type="password" class="form-control" id="pwd" placeholder="Enter password..." name="cus_pass">
     </div>
     
-
-
-    <button type="submit" class="btn btn-primary" name="customer_user">Login</button>
+    <button type="submit" class="btn btn-primary" name="login">Login</button>
   </form>
   </div>
 </div>
