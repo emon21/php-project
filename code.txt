@@ -1,0 +1,4 @@
+
+
+SELECT COUNT(DISTINCT product_name) AS COUNT,products.product_name,products.product_price,products.product_img,products.id FROM products,catagory WHERE products.cat_id=catagory.id and catagory.id =14
+
