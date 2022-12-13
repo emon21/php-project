@@ -1,4 +1,23 @@
-<?php require_once('inc_file/header.php'); ?>
+<?php
+ require_once('inc_file/header.php'); 
+
+include 'admin/connect.php';
+
+ session_start();
+
+  $session_id = session_id();
+
+// $sql = "SELECT * FROM cart WHERE seesion_id ='$session_id'";
+// $run_qry = mysqli_query($links,$sql);
+// $count = mysqli_num_rows($run_qry); 
+// if($count === 1){ 
+//     echo 'Yse Darta';
+// }
+// else{
+//     echo 'No Data Found';
+// }
+
+?>
 
 
 <body>
@@ -167,33 +186,55 @@
 
                                   require_once('admin/connect.php');
 
+                                 
       $sid = session_id();
 
-     $show = "SELECT * FROM cart WHERE  seesion_id='$sid'";
+    //  $show = "SELECT * FROM cart WHERE  seesion_id='$session_id'";
+     $show = "SELECT cart.cart_id,cart.product_name,cart.product_price,cart.pro_qty,products.product_img FROM products,cart WHERE cart.pro_id=products.id AND cart.seesion_id='$session_id'";
         
         $ser_result=mysqli_query($links,$show); 
        
         while($row=mysqli_fetch_array($ser_result)){
-         
+
+            $product_price = $row['product_price'];
+            $pro_qty = $row['pro_qty'];
+            $total = $product_price *  $pro_qty;
+
+           // $subtotal =  $total + ;
+
+            
+           // $grand = (sum($total + $total));
+
+            // $amount= ;
+
+            $a=array($total, $total);
+
+            $subtotal = array_sum($a);
+             echo $subtotal;
+
+
+            echo '</br>';
+
+           // echo 'Sub total :'.sum($subtotal + $total);
 
      ?>
                                 <tr>
                                     <td class="shoping__cart__item">
-                                        <img src="img/cart/cart-1.jpg" alt="">
-                                        <h5><?php echo $row['id'] ?></h5>
+                                        <img src="admin/products/<?php echo $row['product_img'] ?>" alt="" width="120" height="80">
+                                        <h5><?php echo $row['product_name'] ?></h5>
                                     </td>
                                     <td class="shoping__cart__price">
-                                        $55.00
+                                    <?php echo $product_price ?>
                                     </td>
                                     <td class="shoping__cart__quantity">
                                         <div class="quantity">
                                             <div class="pro-qty">
-                                                <input type="text" value="1">
+                                                <input type="text" name="pro_qty" value="<?php echo $pro_qty ?>">
                                             </div>
                                         </div>
                                     </td>
                                     <td class="shoping__cart__total">
-                                        $110.00
+                                    <?php echo $total; ?>
                                     </td>
                                     <td class="shoping__cart__item__close">
                                         <span class="icon_close"></span>
@@ -234,8 +275,12 @@
                     <div class="shoping__checkout">
                         <h5>Cart Total</h5>
                         <ul>
-                            <li>Subtotal <span>$454.98</span></li>
-                            <li>Total <span>$454.98</span></li>
+                            <li>Subtotal <span><?php
+
+echo $subtotal;
+                            
+                            ?></span></li>
+                            <li>Total <span><?php echo $subtotal;  ?></span></li>
                         </ul>
                         <a href="#" class="primary-btn">PROCEED TO CHECKOUT</a>
                     </div>
