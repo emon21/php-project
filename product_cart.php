@@ -45,7 +45,7 @@ if (isset($_GET['details_id'])) {
       	 echo "<script>
      
     window.alert('Data Alreday Insert !!');
-    window.location.href='cart.php';
+    window.location.href='shopping_cart.php';
     </script>";
       }
 
@@ -53,7 +53,7 @@ if (isset($_GET['details_id'])) {
 
 
 	  $ins_qry ="INSERT INTO cart(seesion_id,pro_id,product_name,product_price,pro_qty)
-	   VALUES ('$sid','$pro_id','$pro_name','$pro_price','$total_price')";
+	   VALUES ('$sid','$pro_id','$pro_name','$pro_price','$quentity')";
 
 	  $run_qry = mysqli_query($links,$ins_qry);
 		  if ($run_qry) {
@@ -61,7 +61,7 @@ if (isset($_GET['details_id'])) {
 		  	 echo "<script>
      
     window.alert('Data Added!!');
-    window.location.href='cart.php';
+    window.location.href='shopping_cart.php';
     </script>";
 
 		    // header("location: cart.php");

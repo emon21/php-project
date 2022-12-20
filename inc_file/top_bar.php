@@ -60,7 +60,8 @@
 						<div class="search-bar-top">
 							<div class="search-bar">
 								<select>
-									<option selected="selected">All Category</option>
+									<option selected="selected">
+                                        All Category</option>
 									<option>watch</option>
 									<option>mobile</option>
 									<option>kid’s item</option>

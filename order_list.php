@@ -7,67 +7,6 @@ include 'admin/connect.php';
 
   $session_id = session_id();
 
-// $sql = "SELECT * FROM cart WHERE seesion_id ='$session_id'";
-// $run_qry = mysqli_query($links,$sql);
-// $count = mysqli_num_rows($run_qry); 
-// if($count === 1){ 
-//     echo 'Yse Darta';
-// }
-// else{
-//     echo 'No Data Found';
-// }
-
-
-//update Product Qty
-
-if (isset($_POST['update_cart'])) {
-  
-    $cartID = $_POST['cartID'];
-    $quentity = $_POST['quentity'];
-  
-    $up_qry =  "UPDATE cart SET pro_qty='$quentity' WHERE cart_id='$cartID'";
-                //UPDATE cart SET pro_qty='10' WHERE cart_id='46' 
-    $update = mysqli_query($links,$up_qry);
-  
-        if ($update) {
-  
-            echo "<script>
-             window.alert('Data Update Successfully ...!!');
-             window.location.href='shopping_cart.php';
-             </script>";
-          
-        }
-  
-        if ($quentity <=0 ) {
-          
-          $showqty = "DELETE FROM cart WHERE  cart_id='$cartID'";
-          $shdel = mysqli_query($db,$showqty);
-  
-        }
-  
-  }
-
-//Delete Product
-
-if (isset($_GET['del_ID'])) {
-
-    $cartID = $_GET['del_ID'];
-  
-     $show = "DELETE FROM cart WHERE  cart_id='$cartID'";
-     $shdel = mysqli_query($links,$show);
-  
-       if ($shdel) {
-  
-              echo "<script>
-             
-            window.alert('Data Delete Successfully ...!!');
-            window.location.href='shopping_cart.php';
-            </script>";
-            
-          }
-    
-    }
-
 ?>
 
 
@@ -202,7 +141,7 @@ if (isset($_GET['del_ID'])) {
                         <h2>Shopping Cart</h2>
                         <div class="breadcrumb__option">
                             <a href="./index.html">Home</a>
-                            <span>Shopping Cart</span>
+                            <span>Order List</span>
                         </div>
                     </div>
                 </div>
@@ -224,7 +163,8 @@ if (isset($_GET['del_ID'])) {
                                     <th>Price</th>
                                     <th>Quantity</th>
                                     <th>Total</th>
-                                    <th></th>
+                                    <th>Status</th>
+                                    
                                 </tr>
                             </thead>
 
@@ -235,25 +175,25 @@ if (isset($_GET['del_ID'])) {
                                <?php 
 
 
-                                  require_once('admin/connect.php');
+        require_once('admin/connect.php');
 
                                  
       $sid = session_id();
 
-    //  $show = "SELECT * FROM cart WHERE  seesion_id='$session_id'";
-     $show = "SELECT cart.cart_id,cart.product_name,cart.product_price,cart.pro_qty,products.product_img FROM products,cart WHERE cart.pro_id=products.id AND cart.seesion_id='$session_id'";
+     $show = "SELECT * FROM orders WHERE  session_id='$sid'";
+    //  $show = "SELECT cart.cart_id,cart.product_name,cart.product_price,cart.pro_qty,products.product_img FROM products,cart WHERE cart.pro_id=products.id AND cart.seesion_id='$session_id'";
         
         $ser_result=mysqli_query($links,$show); 
        
-        $sum = 0;
+        
         while($row=mysqli_fetch_array($ser_result)){
 
-            $product_price = $row['product_price'];
+           $product_price = $row['pro_price'];
             $pro_qty = $row['pro_qty'];
             $total = $product_price *  $pro_qty;
 
            // $subtotal =  $total + ;
-           $sum = $sum + $total;
+          // $sum = $sum + $total;
             
            // $grand = (sum($total + $total));
 
@@ -272,29 +212,42 @@ if (isset($_GET['del_ID'])) {
      ?>
                                 <tr>
                                     <td class="shoping__cart__item">
-                                        <img src="admin/products/<?php echo $row['product_img'] ?>" alt="" width="120" height="80">
-                                        <h5><?php echo $row['product_name'] ?></h5>
+                                        <!-- <img src="admin/products/<?php echo $row['product_img'] ?>" alt="" width="120" height="80"> -->
+                                        <h5><?php echo $row['pro_name'] ?></h5>
                                     </td>
                                     <td class="shoping__cart__price">
                                     <?php echo $product_price ?>
                                     </td>
                                     <td class="shoping__cart__quantity">
-                                    <div class="row">
-                                    <form action="" method="post" class="row ">
-                                       <input type="hidden" name="cartID" value="<?php echo $row['cart_id'];?>" class="qty_input">
-                  <input type="number" name="quentity" value="<?php echo $row['pro_qty'];?>" class="" style="width:50px;text-align: center; margin: right 20px;">
-                 <input type="submit" value="Update" class="btn btn-danger ml-1" name="update_cart">
-                                             </form>   
-                                           
-                                   </div>
+                                    
+                                    <?php echo $pro_qty ?>
                                     </td>
                                     <td class="shoping__cart__total">
                                     <?php echo $total; ?>
                                     </td>
-                                    <td class="shoping__cart__item__close">
-                                  
-                                        <a href="shopping_cart.php?del_ID=<?php echo $row['cart_id']?>" onclick="return confirm('Are You Sure To Delete')"><span class="icon_close"></span></a>
+                                    <td class="shoping__cart__total">
+                                    <?php 
+    	
+    	if ($row['status']=="0") {
+    		echo "<h2 style='color:red;font-size:20px;'>".'Pending'."</h2>";
+
+    	}
+    	else if($row['status']=="1"){
+    		//echo "Shifted";
+    		//echo "<h2 style='color:green;font-size:20px;'>".'Shifted'."</h2>";
+    		?>
+    		<a href="info.php?sifted_id=<?php echo $row['id'];?>">Payment Now</a>
+    		<?php } else{
+
+    		echo "confirm";
+    		}
+ 
+    	
+		
+    	
+    	?>
                                     </td>
+                                   
                                 </tr>
 
                               <?php } ?>
@@ -308,35 +261,7 @@ if (isset($_GET['del_ID'])) {
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <!-- <div class="col-lg-12">
-                    <div class="shoping__cart__btns">
-                        <a href="#" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
-
-                        <a href="" class="primary-btn cart-btn cart-btn-right"  name="update_cart"><span class="icon_loading"></span>
-                            Upadate Cart</a>
-                    </div>
-                </div> -->
-                <div class="col-lg-6">
-                    <div class="shoping__continue">
-                        <div class="shoping__discount">
-                        <a href="product_list.php" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="shoping__checkout">
-                        <h5>Cart Total</h5>
-                        <ul>
-                            <li>Subtotal <span>
-                                <?php echo $sum;?>
-                            </span></li>
-                            <li>Total <span><?php echo $sum;?></span></li>
-                        </ul>
-                        <a href="checkout.php" class="primary-btn">PROCEED TO CHECKOUT</a>
-                    </div>
-                </div>
-            </div>
+            
         </div>
     </section>
     <!-- Shoping Cart Section End -->
